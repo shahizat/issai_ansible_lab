@@ -1,0 +1,42 @@
+- name: Install compute node RPMs
+  ansible.builtin.dnf:
+    name: "/tmp/rpmbuild/RPMS/x86_64/{{ item }}"
+    disable_gpg_check: yes
+    state: present
+  with_items:
+    - slurm-24.11.4-1.el9.x86_64.rpm
+    - slurm-example-configs-24.11.4-1.el9.x86_64.rpm
+    - slurm-slurmctld-24.11.4-1.el9.x86_64.rpm
+    - slurm-slurmdbd-24.11.4-1.el9.x86_64.rpm
+    - slurm-perlapi-24.11.4-1.el9.x86_64.rpm
+    - slurm-libpmi-24.11.4-1.el9.x86_64.rpm
+    - slurm-devel-24.11.4-1.el9.x86_64.rpm
+
+- name: Copying slurm.conf into place with correct permissions
+  ansible.builtin.copy:
+    src: roles/slurmd/files/slurm.conf
+    dest: /etc/slurm/
+    owner: slurm
+    group: slurm
+    mode: '0755'
+
+- name: Copying slurmdbd.conf into place with correct permissions
+  ansible.builtin.copy:
+    src: roles/slurmd/files/slurmdbd.conf
+    dest: /etc/slurm/
+    owner: slurm
+    group: slurm
+    mode: '0600'
+
+- name: Copying cgroup.conf into place with correct permissions
+  ansible.builtin.copy:
+    src: roles/slurmd/files/cgroup.conf
+    dest: /etc/slurm/
+    mode: '0755'
+
+- name: Copying mariadb-server.cnf into place
+  ansible.builtin.copy:
+    src: roles/slurmd/files/mariadb-server.cnf
+    dest: /etc/my.cnf.d/
+    owner: root
+    group: root

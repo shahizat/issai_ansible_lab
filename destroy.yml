@@ -1,0 +1,37 @@
+---
+####### All play ############
+- name: Remove the SLURM related packages and directories 
+  become: yes
+  hosts: head, all_nodes
+  tasks:
+
+    - name: uninstall slurm
+      ansible.builtin.dnf:
+        name:  "{{ item }}"
+        state: absent
+      with_items:
+        - slurm-slurmctld
+        - slurm-devel
+        - slurm-example-configs
+        - slurm-slurmdbd
+        - slurm-libpmi
+        - slurm
+        - slurm-perlapi
+        - munge-devel
+        - munge
+        - munge-libs
+        - "mariadb-*"
+
+    - name: remove files
+      ansible.builtin.file:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - /etc/slurm
+        - /etc/munge
+        - /var/log/slurm 
+        - /var/lib/mysql
+        - "roles/slurmd/files/slurm-*.rpm"
+        - roles/slurm-rpm-build/files/slurm-23.02.1.tar.bz2
+        - /tmp/rpmbuild
+

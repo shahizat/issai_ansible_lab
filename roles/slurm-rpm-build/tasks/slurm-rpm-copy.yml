@@ -1,0 +1,11 @@
+- name: Copy the rpm files into slurmd/files
+  copy:
+    src: "/tmp/rpmbuild/RPMS/x86_64/{{ item }}"
+    dest: roles/slurmd/files/
+    mode: 0644
+    force: true
+  loop:
+    - slurm-24.11.4-1.el9.x86_64.rpm
+    - slurm-perlapi-24.11.4-1.el9.x86_64.rpm
+    - slurm-slurmd-24.11.4-1.el9.x86_64.rpm
+    - slurm-libpmi-24.11.4-1.el9.x86_64.rpm

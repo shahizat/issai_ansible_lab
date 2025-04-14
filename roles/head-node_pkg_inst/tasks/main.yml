@@ -1,0 +1,29 @@
+- name: Install required dnf packages on head node
+  ansible.builtin.dnf:
+    name:
+      - gcc
+      - ansible
+      - rpm-build
+      - pam-devel
+      - perl
+      - perl-DBI
+      - readline-devel
+      - mariadb-devel
+      - mariadb-server
+      - python3-PyMySQL 
+      - munge
+      - munge-libs
+      - munge-devel
+    state: latest
+
+- name: Stop MariaDB service if running (to ensure fresh start/config)
+  ansible.builtin.systemd:
+    name: mariadb
+    state: stopped
+    enabled: true  # ensure it will start on boot
+
+- name: Start and enable MariaDB service
+  ansible.builtin.systemd:
+    name: mariadb
+    state: started
+    enabled: true

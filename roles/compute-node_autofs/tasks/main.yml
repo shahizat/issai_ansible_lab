@@ -1,0 +1,3 @@
+- name: Step 3 Set and configure autofs on the compute nodes.
+  include_tasks: setup_autofs.yml
+  tags: autofs
